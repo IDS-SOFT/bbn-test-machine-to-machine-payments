@@ -5,7 +5,7 @@ contract M2MPayments {
 
     address public owner;
     mapping(address => uint256) public balances;
-    event CheckBalance(string text, uint amount);
+    event CheckBalance(uint amount);
 
     constructor() {
         owner = msg.sender;
@@ -19,6 +19,7 @@ contract M2MPayments {
 
     // Function to transfer funds from one machine to another
     function transfer(address to, uint256 amount) external {
+        require(to != address(0), "Invalid address");
         require(balances[msg.sender] >= amount, "Insufficient balance.");
         require(msg.sender != to, "You cannot transfer funds to yourself.");
 
@@ -41,11 +42,8 @@ contract M2MPayments {
     }
 
     function getUserBalance(address user_account) external returns (uint){
-    
-       string memory data = "User Balance is : ";
        uint user_bal = user_account.balance;
-       emit CheckBalance(data, user_bal );
+       emit CheckBalance(user_bal);
        return (user_bal);
-
     }
 }
